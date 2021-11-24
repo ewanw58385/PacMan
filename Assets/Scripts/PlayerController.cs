@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     public float speed;
 
+    public static float score;
+
     public GameObject nextPoint;
     public static List<GameObject> gameObjectsList = new List<GameObject>(); //create list of gameObjects (static so Ai script can access)
     //this is done because AI follow a moving player and they don't dymanically update the position until point is reached
@@ -45,7 +47,7 @@ public class PlayerController : MonoBehaviour
         //print(GoList[0].transform.position);
     }
 
-        void OnTriggerEnter(Collider col)
+    void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "enemy")
         {
