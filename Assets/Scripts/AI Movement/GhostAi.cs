@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GhostAi : MonoBehaviour
+public class GhostAi : MonoBehaviour //Ai script for NatMesh movement 
 {
     //public Transform[] points;
     public List<GameObject> points = new List<GameObject>(); //new list
@@ -14,6 +14,9 @@ public class GhostAi : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 movement;
+
+    public static bool runAway = false; //static bool so can be accessed from GhostState script
+    public GameObject playerRunAway;
 
     // Start is called before the first frame update
     void Start()
@@ -38,9 +41,6 @@ public class GhostAi : MonoBehaviour
         {
   	        GoToNextPoint();
         }
-
-        DisableDiagonalMovement();
-
         //print(points[0].transform.position); //print point location
     }
 
@@ -50,22 +50,19 @@ public class GhostAi : MonoBehaviour
         {
             return;
         }
-        nav.destination = points[destPoint].transform.position; //travel to destination
-        destPoint = (destPoint + 1) % listLength; //sets next destiation
-    }
 
-    void DisableDiagonalMovement()
-    {
-        movement.x = rb.velocity.x;
-        movement.z = rb.velocity.z;
-
-        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.z)) //if statement disables diagonal movement
+        if (!runAway) //if not running away from player 
         {
-            movement.z = 0;
+            nav.destination = points[destPoint].transform.position; //travel to destination (player)
+            destPoint = (destPoint + 1) % listLength; //sets next destiation
         }
-        else
+
+        if (runAway) //if running away from player
         {
-            movement.x = 0;
+            Vector3 directionToplayer = transform.position - playerRunAway.transform.position; //calculates the directon to player in opposite direction
+            Vector3 newPostion = transform.position + directionToplayer; //new position for AI to move to
+
+            nav.SetDestination(newPostion); //move to new position (away from player)
         }
     }
 }

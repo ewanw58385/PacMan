@@ -14,6 +14,6 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        timeText.text = "Tme: \n" + Mathf.Round(time).ToString();
+        timeText.text = "Time: \n" + Mathf.Round(time).ToString();
     }
 }
